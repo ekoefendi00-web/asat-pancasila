@@ -13,46 +13,47 @@
         * { box-sizing: border-box; transition: all 0.2s ease; font-family: 'Inter', system-ui, sans-serif; }
         body { background: var(--bg); margin: 0; user-select: none; color: var(--text-main); overflow-x: hidden; }
         
-        /* Cheat Overlay */
+        /* Anti-Cheat Overlay */
         #cheat-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); color: white; z-index: 9999; justify-content: center; align-items: center; text-align: center; padding: 20px; backdrop-filter: blur(15px); }
         
         /* Login Page */
         #login-page { position: fixed; inset: 0; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
         .login-card { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); text-align: center; }
         
-        /* Header */
+        /* Header & Timer */
         header { background: var(--white); border-bottom: 2px solid var(--border); padding: 0 15px; display: none; justify-content: space-between; align-items: center; height: 70px; position: sticky; top: 0; z-index: 100; }
         .timer-box { background: #fff1f2; padding: 8px 15px; border-radius: 8px; border: 1px solid #ffe4e6; font-weight: 800; font-size: 1.1rem; color: var(--danger); font-family: monospace; }
         
-        /* Main Layout */
+        /* Layout Utama */
         .main-wrapper { display: none; min-height: calc(100vh - 70px); padding: 15px; gap: 15px; max-width: 1200px; margin: 0 auto; flex-direction: row; }
         .soal-section { flex: 3; background: white; border-radius: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .soal-content { flex: 1; padding: 20px; font-size: 1.1rem; line-height: 1.6; }
+        .soal-content { flex: 1; padding: 20px; font-size: 1.1rem; line-height: 1.6; overflow-y: auto; }
         
-        /* Options */
+        /* Pilihan Jawaban */
         .opt-item { border: 1px solid var(--border); padding: 12px; margin-bottom: 10px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
         .opt-item.selected { background: #eff6ff; border: 2px solid var(--primary); font-weight: 600; }
         .opt-label { min-width: 30px; height: 30px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; }
         .selected .opt-label { background: var(--primary); color: white; border-color: var(--primary); }
         
-        /* Sidebar Navigation */
+        /* Navigasi Sidebar */
         .sidebar { flex: 1; background: white; border-radius: 15px; padding: 15px; max-width: 300px; border: 1px solid var(--border); height: fit-content; position: sticky; top: 85px; }
         .grid-nomor { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 10px; }
-        .btn-nomor { aspect-ratio: 1/1; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 6px; font-weight: 700; font-size: 0.9rem; background: white; }
+        .btn-nomor { aspect-ratio: 1/1; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 6px; font-weight: 700; font-size: 0.85rem; background: white; }
         .btn-nomor.active { border: 2px solid var(--primary); color: var(--primary); }
         .btn-nomor.filled { background: var(--primary); color: white; border-color: var(--primary); }
         
-        .img-soal { display: block; max-width: 100%; height: auto; max-height: 200px; margin: 10px auto; border-radius: 8px; }
+        .img-soal { display: block; max-width: 100%; height: auto; max-height: 200px; margin: 10px auto; border-radius: 8px; border: 1px solid #ddd; }
         
-        /* Responsive Fix for Mobile */
+        /* Perbaikan Tampilan HP */
         @media (max-width: 768px) {
             .main-wrapper { flex-direction: column; padding: 10px; }
-            .sidebar { max-width: 100%; position: static; order: 2; }
-            .soal-section { order: 1; }
+            .sidebar { max-width: 100%; position: static; order: 2; margin-bottom: 20px; }
+            .soal-section { order: 1; min-height: 60vh; }
             .grid-nomor { grid-template-columns: repeat(8, 1fr); }
-            .timer-box { font-size: 1rem; padding: 5px 10px; }
-            header { height: 60px; }
+            .timer-box { font-size: 1rem; padding: 5px 12px; }
+            header { height: 60px; padding: 0 10px; }
             .soal-content { padding: 15px; font-size: 1rem; }
+            .opt-item { padding: 10px; }
         }
 
         #result-page { display: none; max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
@@ -61,7 +62,12 @@
 <body oncontextmenu="return false;" oncopy="return false;">
 
 <div id="cheat-overlay">
-    <div><h1 style="font-size:2.5rem;">⚠️</h1><h2>JANGAN PINDAH HALAMAN!</h2><p>Fokuslah pada pengerjaan soal Anda.</p><button onclick="closeOverlay()" style="padding:12px 24px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">KEMBALI KE UJIAN</button></div>
+    <div>
+        <h1 style="font-size:3rem; margin:0;">⚠️</h1>
+        <h2>JANGAN PINDAH TAB!</h2>
+        <p>Halaman terdeteksi tidak aktif. Kembali ke soal sekarang.</p>
+        <button onclick="closeOverlay()" style="padding:12px 24px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:1rem;">KEMBALI KE UJIAN</button>
+    </div>
 </div>
 
 <div id="login-page">
@@ -70,9 +76,9 @@
         <p style="font-weight:bold; color:#64748b; margin-bottom:20px;">SD NEGERI NGASEM I</p>
         <div style="text-align: left;">
             <label style="font-size:0.75rem; font-weight:bold;">Nama Lengkap</label>
-            <input type="text" id="stu-name" placeholder="Nama sesuai absen..." style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:2px solid var(--border); outline:none;">
+            <input type="text" id="stu-name" placeholder="Sesuai daftar hadir..." style="width:100%; padding:12px; margin-bottom:12px; border-radius:8px; border:2px solid var(--border); outline:none; font-size:1rem;">
             <label style="font-size:0.75rem; font-weight:bold;">Nomor Peserta</label>
-            <input type="text" id="stu-id" placeholder="Contoh: 001" style="width:100%; padding:12px; margin-bottom:20px; border-radius:8px; border:2px solid var(--border); outline:none;">
+            <input type="text" id="stu-id" placeholder="Contoh: 001" style="width:100%; padding:12px; margin-bottom:20px; border-radius:8px; border:2px solid var(--border); outline:none; font-size:1rem;">
         </div>
         <button onclick="startExam()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:1rem;">MASUK UJIAN</button>
     </div>
@@ -80,41 +86,41 @@
 
 <header id="exam-header">
     <div style="overflow: hidden;">
-        <div id="subj-display" style="font-size:0.6rem; font-weight:bold; color:#64748b;">PENDIDIKAN PANCASILA</div>
-        <div id="user-display" style="font-weight:800; color:var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">NAMA</div>
+        <div style="font-size:0.6rem; font-weight:bold; color:#64748b; letter-spacing: 0.5px;">PENDIDIKAN PANCASILA</div>
+        <div id="user-display" style="font-weight:800; color:var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; font-size:1rem;">NAMA PESERTA</div>
     </div>
     <div class="timer-box" id="timer">90:00</div>
 </header>
 
 <div class="main-wrapper" id="exam-body">
     <div class="soal-section">
-        <div style="padding:12px 20px; background:#f8fafc; border-bottom:1px solid var(--border); font-weight:bold; color:var(--primary); font-size: 0.9rem;" id="header-no">SOAL NO 1</div>
+        <div style="padding:12px 20px; background:#f8fafc; border-bottom:1px solid var(--border); font-weight:bold; color:var(--primary); font-size: 0.85rem;" id="header-no">SOAL NO 1</div>
         <div class="soal-content" id="content-area"></div>
         <div style="padding:15px; border-top:1px solid var(--border); display:flex; gap:10px; background:#f8fafc;">
-            <button onclick="nav(-1)" style="flex:1; padding:12px; border-radius:8px; border:none; cursor:pointer; font-weight:bold; background:#e2e8f0;">KEMBALI</button>
-            <button id="btn-next" onclick="nav(1)" style="flex:2; padding:12px; background:var(--primary); color:white; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">LANJUT</button>
-            <button id="btn-finish-last" onclick="confirmFinish()" style="display:none; flex:2; padding:12px; background:var(--danger); color:white; border-radius:8px; border:none; cursor:pointer; font-weight:bold;">KIRIM JAWABAN</button>
+            <button onclick="nav(-1)" style="flex:1; padding:12px; border-radius:8px; border:none; cursor:pointer; font-weight:bold; background:#e2e8f0; font-size:0.9rem;">KEMBALI</button>
+            <button id="btn-next" onclick="nav(1)" style="flex:2; padding:12px; background:var(--primary); color:white; border-radius:8px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">SELANJUTNYA</button>
+            <button id="btn-finish-last" onclick="confirmFinish()" style="display:none; flex:2; padding:12px; background:var(--danger); color:white; border-radius:8px; border:none; cursor:pointer; font-weight:bold; font-size:0.9rem;">SELESAI & KIRIM</button>
         </div>
     </div>
     <div class="sidebar">
-        <div style="font-weight:bold; font-size:0.8rem; margin-bottom:8px;">NAVIGASI SOAL</div>
+        <div style="font-weight:bold; font-size:0.8rem; margin-bottom:10px; color:#64748b;">NAVIGASI SOAL</div>
         <div class="grid-nomor" id="nav-grid"></div>
     </div>
 </div>
 
 <div id="result-page">
-    <h2 style="color:var(--primary);">UJIAN SELESAI</h2>
-    <div id="final-score" style="font-size:4rem; font-weight:900; color:var(--success);">0</div>
-    <p>Terima kasih! Jawaban Anda berhasil dikirim.</p>
-    <button onclick="resetForNext()" style="padding:15px 30px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer; font-weight:bold;">KELUAR</button>
+    <h2 style="color:var(--primary); margin-top:0;">UJIAN SELESAI</h2>
+    <div id="final-score" style="font-size:4.5rem; font-weight:900; color:var(--success); margin: 10px 0;">0</div>
+    <p style="color:#64748b;">Jawaban Anda telah terkirim ke server sekolah.<br>Silakan tutup halaman ini.</p>
+    <button onclick="resetForNext()" style="padding:15px 35px; background:var(--primary); color:white; border:none; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1rem; margin-top:10px;">KELUAR</button>
 </div>
 
 <script>
-    // Copy BankSoal Anda di sini (sama seperti sebelumnya)
+    // URL Web App Google Script Anda
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz0UlQLzZlMdgqJYH5fiXJ2EmKJY_6Stf061llEqUitrVAkVKlFdBSQhSNinBoAkYmLTg/exec";
 
     const bankSoal = [
-        // PILIHAN GANDA (1-35)
+        // PG 1-35
         { id: 1, type: 'pg', q: "Kita harus memelihara dan membina kerukunan hidup antarumat beragama dengan cara ...", o: ["menghormati hak dan kewajiban umat beragama", "mengotori tempat ibadah umat agama lain", "menjelek jelekan pemeluk agama lain", "menyebarkan kebencian pada agama tertentu"], a: "A" },
         { id: 2, type: 'pg', q: "Ketika berangkat ke sekolah, kamu melihat temanmu yang berasal dari suku dan agama yang berbeda terjatuh dari sepeda. Sikap yang sebaiknya kamu lakukan adalah ...", o: ["berpura-pura tidak melihatnya", "tidak menolongnya karena berbeda suku", "menolongnya walaupun berbeda suku", "meninggalkannya takut terlambat"], a: "C" },
         { id: 3, type: 'pg', q: "Manfaat bersikap tidak membeda-bedakan ras dalam berteman adalah untuk ....", o: ["Menjadikan perselisihan", "Mempererat tali persaudaraan", "Saling mengejek dengan teman", "Menjadikan pertengkaran"], a: "B" },
@@ -151,19 +157,19 @@
         { id: 34, type: 'pg', q: "Sikap yang harus dihindari dalam gotong royong adalah .....", o: ["Egois", "Toleransi", "Kerjasama", "Solidaritas"], a: "A" },
         { id: 35, type: 'pg', q: "Manfaat gotong-royong di masyarakat adalah ...", o: ["membuat konflik antar warga masyarakat", "meningkatkan lingkungan yang kumuh", "mengurangi interaksi sosial di lingkungan", "membuat pekerjaan cepat selesai"], a: "D" },
 
-        // ISIAN (36-45)
+        // ISIAN 36-45
         { id: 36, type: 'isian', q: "Akibat jika tidak ada sikap toleransi di lingkungan kita adalah ....", a: "Perpecahan" },
-        { id: 37, type: 'isian', q: "Negara menjamin kemerdekaan tiap-tiap penduduk untuk memeluk agamanya masing-masing dan untuk beribadat menurut agamanya dan kepercayaannya itu. Bunyi UUD 1945 pasal 29 ayat ...", a: "2" },
+        { id: 37, type: 'isian', q: "Negara menjamin kemerdekaan tiap-tiap penduduk untuk memeluk agamanya masing-masing. Bunyi UUD 1945 pasal 29 ayat ...", a: "2" },
         { id: 38, type: 'isian', q: "Apa nama alat musik tradisional dari gambar tersebut?", a: "Sasando", img: "https://media.quizizz.com/_mdserver/main/media/resource/gs/quizizz-media/quizzes/0c58d069-29a3-4144-bfd0-b18501d1d981-v2?w=200&h=200" },
         { id: 39, type: 'isian', q: "Rumah adat tersebut berasal dari provinsi?", a: "Sumatera Barat", img: "https://media.quizizz.com/_mdserver/main/media/resource/gs/quizizz-media/quizzes/c2ea845e-e1fe-47e4-aa43-30af1cc3b297-v2?w=200&h=200" },
         { id: 40, type: 'isian', q: "Provinsi yang memilih gubernur berdasarkan garis keturunan Sultan adalah ....", a: "Yogyakarta" },
         { id: 41, type: 'isian', q: "Jumlah provinsi di Indonesia saat ini adalah ....", a: "38" },
         { id: 42, type: 'isian', q: "Nama gubernur Jawa Timur saat ini adalah ....", a: "Khofifah" },
         { id: 43, type: 'isian', q: "Gotong Royong merupakan istilah dari bahasa Jawa, yaitu Gotong dan Royong. Gotong berarti ....", a: "Pikul" },
-        { id: 44, type: 'isian', q: "Tradisi Bakar Batu adalah tradisi suku Dani, ungkapan rasa syukur pada Tuhan dan symbol solidaritas yang kuat. Berasal dari mana Tradisi Bakar Batu tersebut .... ", a: "Papua" },
+        { id: 44, type: 'isian', q: "Berasal dari mana Tradisi Bakar Batu tersebut .... ", a: "Papua" },
         { id: 45, type: 'isian', q: "Suku Betawi mendiami wilayah provinsi ....", a: "DKI Jakarta" },
 
-        // URAIAN (46-50)
+        // URAIAN 46-50
         { id: 46, type: 'uraian', q: "Tuliskan 3 contoh sikap menghormati keberagaman dalam lingkungan keluarga!" },
         { id: 47, type: 'uraian', q: "Tuliskan 2 contoh toleransi keberagaman budaya dan agama di lingkungan masyarakat!" },
         { id: 48, type: 'uraian', q: "Tuliskan ciri khas provinsi tempat kalian tinggal (Jawa Timur)!" },
@@ -177,7 +183,7 @@
     function startExam() {
         const n = document.getElementById('stu-name').value.trim();
         const i = document.getElementById('stu-id').value.trim();
-        if(!n || !i) return alert("Isi Nama dan No Peserta!");
+        if(!n || !i) return alert("Silakan isi Nama Lengkap dan Nomor Peserta!");
         
         document.getElementById('user-display').innerText = n.toUpperCase();
         document.getElementById('login-page').style.display = 'none';
@@ -193,7 +199,7 @@
         const area = document.getElementById('content-area');
         
         let html = s.img ? `<img src="${s.img}" class="img-soal">` : "";
-        html += `<p style="margin-bottom:20px;">${s.q}</p>`;
+        html += `<p style="margin-bottom:20px; font-weight:500;">${s.q}</p>`;
 
         if(s.type === 'pg') {
             s.o.forEach((opt, i) => {
@@ -202,7 +208,7 @@
                     <div class="opt-label">${char}</div><div>${opt}</div></div>`;
             });
         } else {
-            html += `<textarea id="ans-box" onblur="save(this.value)" placeholder="Tulis jawaban di sini..." style="width:100%; height:120px; padding:12px; border-radius:10px; border:2px solid var(--border); font-size:1rem; outline:none; resize:none;">${answers[idx] || ''}</textarea>`;
+            html += `<textarea id="ans-box" onblur="save(this.value)" placeholder="Tuliskan jawaban lengkap Anda di sini..." style="width:100%; height:140px; padding:12px; border-radius:10px; border:2px solid var(--border); font-size:1rem; outline:none; resize:none;">${answers[idx] || ''}</textarea>`;
         }
         area.innerHTML = html;
 
@@ -222,30 +228,44 @@
 
     function initNav() {
         const g = document.getElementById('nav-grid');
+        g.innerHTML = "";
         bankSoal.forEach((_, i) => {
-            const d = document.createElement('div'); d.className = 'btn-nomor'; d.id = `n-${i}`;
-            d.innerText = i + 1; d.onclick = () => render(i); g.appendChild(d);
+            const d = document.createElement('div'); 
+            d.className = 'btn-nomor'; 
+            d.id = `n-${i}`;
+            d.innerText = i + 1; 
+            d.onclick = () => render(i); 
+            g.appendChild(d);
         });
     }
 
     function updateNavUI() {
         bankSoal.forEach((_, i) => {
             const el = document.getElementById(`n-${i}`);
-            if(el) el.className = 'btn-nomor' + (i === current ? ' active' : '') + (answers[i] ? ' filled' : '');
+            if(el) {
+                let statusClass = 'btn-nomor';
+                if(i === current) statusClass += ' active';
+                if(answers[i]) statusClass += ' filled';
+                el.className = statusClass;
+            }
         });
     }
 
     function startTimer(m) {
         let t = m * 60;
         const interval = setInterval(() => {
-            let mn = Math.floor(t/60); let s = t%60;
+            let mn = Math.floor(t/60); 
+            let s = t%60;
             document.getElementById('timer').innerText = `${mn}:${s<10?'0':''}${s}`;
-            if(t-- <= 0) { clearInterval(interval); confirmFinish(true); }
+            if(t-- <= 0) { 
+                clearInterval(interval); 
+                confirmFinish(true); 
+            }
         }, 1000);
     }
 
     function confirmFinish(auto = false) {
-        if(!auto && !confirm("Kirim semua jawaban?")) return;
+        if(!auto && !confirm("Yakin ingin mengakhiri ujian dan kirim jawaban?")) return;
         
         let correct = 0;
         bankSoal.forEach((s, i) => {
@@ -254,12 +274,12 @@
         });
         const finalScore = Math.round((correct / 45) * 100);
 
-        // Kirim (CORS No-Mode aman untuk Google App Script)
         fetch(SCRIPT_URL, {
             method: "POST", mode: "no-cors",
             body: JSON.stringify({
                 nama: document.getElementById('stu-name').value,
                 nomor: document.getElementById('stu-id').value,
+                mapel: "PENDIDIKAN PANCASILA",
                 skor: finalScore,
                 jawaban: JSON.stringify(answers)
             })
@@ -273,7 +293,13 @@
 
     function resetForNext() { localStorage.clear(); location.reload(); }
     function closeOverlay() { document.getElementById('cheat-overlay').style.display = 'none'; }
-    document.addEventListener("visibilitychange", () => { if(document.hidden && document.getElementById('exam-body').style.display === 'flex') document.getElementById('cheat-overlay').style.display = 'flex'; });
+    
+    // Deteksi Fokus Tab
+    document.addEventListener("visibilitychange", () => { 
+        if(document.hidden && document.getElementById('exam-body').style.display === 'flex') {
+            document.getElementById('cheat-overlay').style.display = 'flex'; 
+        }
+    });
 </script>
 </body>
 </html>
